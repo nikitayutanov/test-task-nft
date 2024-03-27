@@ -1,31 +1,22 @@
 import clsx from 'clsx';
 import { Input, Textarea, InputWrapper } from '@gear-js/ui';
 import { useReferenceAttributes } from 'hooks/useReferenceAttributes';
-import { NFTTokenMetadata } from '../types';
+import { NFTTokenMetadataResponse } from '../types';
 import styles from './View.module.scss';
 
 type Props = {
-  metadata?: NFTTokenMetadata;
+  metadata: NFTTokenMetadataResponse;
 };
 
 function NFTTokenView({ metadata }: Props) {
-  const attributes = useReferenceAttributes(metadata?.reference);
-
-  if (!metadata) {
-    return (
-      <div className={styles.wrapper}>
-        <span>Here you will see your NFT token</span>
-      </div>
-    );
-  }
+  const attributes = useReferenceAttributes(metadata.attribUrl);
 
   return (
     <div className={styles.wrapper}>
-      <h3>Your NFT token</h3>
       <Input label="Name" value={metadata.name} readOnly className={styles.formItem} gap="1/6" />
       <Input label="Description" value={metadata.description} readOnly className={styles.formItem} gap="1/6" />
       <InputWrapper size="normal" direction="x" id="_empty" label="Image" gap="1/6">
-        <img src={metadata.media} alt={metadata.name} />
+        <img src={metadata.mediaUrl} alt={metadata.name} className={styles.image} />
       </InputWrapper>
       {attributes && (
         <Textarea

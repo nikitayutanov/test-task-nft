@@ -1,11 +1,17 @@
+@use '@gear-js/ui/variables' as *;
+
 .wrapper {
-  padding: 24px 0 12px 0;
+  padding: 24px;
+  margin: 12px 0;
+  border: 1px solid $lineColor;
+  border-radius: $borderRadiusMedium;
 }
 
 .formItem {
   margin-bottom: 12px;
 }
 
-.textarea {
-  margin-top: 12px;
+.image {
+  max-width: 100%;
+  margin-bottom: 12px;
 }

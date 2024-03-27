@@ -1,42 +1,38 @@
-import { NFTTokenForm } from 'entities/nft-token/form/From';
-import { NFTTokenMetadata } from 'entities/nft-token/types';
+import { NFTTokenState } from 'entities/nft-token/types';
 import { NFTTokenView } from 'entities/nft-token/view';
-import { useNFTState, useSendNFTMessage } from 'hooks/api';
-
-// TODO: use real user data
-const metadata = {
-  name: 'test',
-  description: 'try to send message',
-  media: 'https://placehold.co/600x400/000000/FFF',
-  reference: 'https://dummyjson.com/products/1',
-};
+import { CreateNFTToken } from 'features/create-nft-token/CreateNFTToken';
+import { useNFTState } from 'hooks/api';
+import { useMemo } from 'react';
+import { Stub } from 'components/layout/stub/Stub';
+import styles from './Home.module.scss';
 
 function Home() {
-  const { state } = useNFTState<NFTTokenMetadata>();
-  const sendMessage = useSendNFTMessage();
+  const { state } = useNFTState<NFTTokenState>();
 
-  const onSendMessage: React.FormEventHandler<HTMLFormElement> = (event) => {
-    event.preventDefault();
+  const hasTokens = Boolean(state?.tokens.length);
+  const sortedTokens = useMemo(
+    () =>
+      state?.tokens
+        .sort(([firstId], [secondId]) => secondId - firstId)
+        .map(([transactionId, metadata]) => <NFTTokenView metadata={metadata} key={transactionId} />),
+    [state?.tokens],
+  );
 
-    const payload = {
-      mint: {
-        transaction_id: 0,
-        token_metadata: metadata,
-      },
-    };
-
-    sendMessage({
-      payload,
-      gasLimit: 500_000_000_000,
-    });
-  };
+  const stub = (
+    <Stub title="There are no your NFT tokens yet" subtitle="Lets create a new one">
+      <CreateNFTToken />
+    </Stub>
+  );
 
   return (
     <>
-      <NFTTokenForm onSubmit={onSendMessage} />
-      <NFTTokenView metadata={metadata} />
+      <div className={styles.wrapper}>
+        <h3>Your NFT tokens:</h3>
+        <CreateNFTToken />
+      </div>
 
-      <div>{JSON.stringify(state)}</div>
+      {/* TODO: move to entities/nft-token/list */}
+      {hasTokens ? sortedTokens : stub}
     </>
   );
 }
