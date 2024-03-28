@@ -6,6 +6,7 @@ export type NFTTokenMetadataRequest = {
 };
 
 export type NFTTokenMetadataResponse = {
+  owner: string;
   name: string;
   description: string;
   mediaUrl: string;
@@ -19,7 +20,8 @@ export type MintTokenPayload<T> = {
   };
 };
 
-export type Token<T> = [number, { owner: string } & T];
+export type TransactionId = number;
+export type Token<T> = [TransactionId, T];
 
 export type TokenState<T> = {
   tokens: Token<T>[];

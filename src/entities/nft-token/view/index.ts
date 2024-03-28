@@ -1,1 +1,0 @@
-export { NFTTokenView } from './View';

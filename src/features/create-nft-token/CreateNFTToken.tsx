@@ -32,6 +32,8 @@ function CreateNFTToken() {
       payload,
       gasLimit: 500_000_000_000,
       value: 0,
+    }).then(() => {
+      closeModal();
     });
   };
   return (
