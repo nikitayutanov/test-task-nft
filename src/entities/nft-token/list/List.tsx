@@ -23,7 +23,7 @@ function NFTTokenList({ title, actionSlot, renderItem }: Props) {
     [state?.tokens, account?.decodedAddress],
   );
 
-  const hasTokens = Boolean(sortedTokens.length);
+  const isShowStub = state && !sortedTokens.length;
 
   return (
     <div>
@@ -32,12 +32,12 @@ function NFTTokenList({ title, actionSlot, renderItem }: Props) {
         {actionSlot}
       </div>
 
-      {hasTokens ? (
-        sortedTokens.map(([transactionId, metadata]) => renderItem(metadata, transactionId))
-      ) : (
+      {isShowStub ? (
         <Stub title="There are no your NFT tokens yet" subtitle="Lets create a new one">
           {actionSlot}
         </Stub>
+      ) : (
+        sortedTokens.map(([transactionId, metadata]) => renderItem(metadata, transactionId))
       )}
     </div>
   );
